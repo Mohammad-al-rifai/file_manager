@@ -1,7 +1,8 @@
 import 'package:file_manager/app/resources/string_manager.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/auth/presentation/screens/splash_screen.dart';
+import '../../features/home/presentation/screens/splash_screen.dart';
+
 
 class Routes {
   static const String splashRoute = "/";

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:file_manager/app/resources/assets_manager.dart';
-import 'package:file_manager/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/resources/color_manager.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../app/resources/constants_manager.dart';
+import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -29,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _goNext() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) =>  const LoginScreen()));
   }
 
   @override

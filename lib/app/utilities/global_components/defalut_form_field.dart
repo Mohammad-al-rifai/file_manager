@@ -5,63 +5,38 @@ import 'package:flutter/material.dart';
 class DefaultFormField extends StatelessWidget {
   DefaultFormField({
     super.key,
-    required TextEditingController? controller,
-    required TextInputType? type,
-    required Function? validate,
-    required String? label,
-    required IconData? prefix,
-    IconData? suffix,
-    Function? onSubmitted,
-    Function? onChanged,
-    Function? onTap,
-    bool isPassword = false,
-    Function? suffixPressed,
+    required this.controller,
+    required this.label,
+    required this.prefixIcon,
+    required this.validator,
+    this.suffix,
+    this.onFieldSubmitted,
+    this.onChanged,
+    this.keyboardType = TextInputType.text,
+    this.isPassword = false,
+    this.onTap,
   });
 
-  TextEditingController? controller;
-  TextInputType? type;
-  Function? validate;
-  String? label = '';
-  IconData? prefix;
+  TextEditingController controller;
+  String label;
+  IconData prefixIcon;
   IconData? suffix;
-  Function? onSubmitted;
+  Function validator;
+  Function? onFieldSubmitted;
   Function? onChanged;
-  Function? onTap;
-  bool isPassword = false;
+  TextInputType keyboardType;
+  bool isPassword;
   Function? suffixPressed;
+  Function? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      keyboardType: type,
-      validator: (value) {
-        if (validate != null) {
-          validate!(value);
-        }
-        return null;
-      },
-      onFieldSubmitted: (value) {
-        if (onSubmitted != null) {
-          onSubmitted!(value);
-        }
-      },
-      onChanged: (value) {
-        if (onChanged != null) {
-          onChanged!(value);
-        }
-      },
-      onTap: () {
-        if (onTap != null) {
-          onTap!();
-        }
-      },
-      obscureText: isPassword,
       decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
+        label: Text(label),
         prefixIcon: Icon(
-          prefix,
+          prefixIcon,
         ),
         suffixIcon: suffix != null
             ? IconButton(
@@ -75,7 +50,26 @@ class DefaultFormField extends StatelessWidget {
                 },
               )
             : null,
+        border: const OutlineInputBorder(),
       ),
+      keyboardType: keyboardType,
+      obscureText: isPassword,
+      validator: (value) => validator(value),
+      onFieldSubmitted: (value) {
+        if (onFieldSubmitted != null) {
+          onFieldSubmitted!(value);
+        }
+      },
+      onChanged: (value) {
+        if (onChanged != null) {
+          onChanged!(value);
+        }
+      },
+      onTap: () {
+        if (onTap != null) {
+          onTap!();
+        }
+      },
     );
   }
 }

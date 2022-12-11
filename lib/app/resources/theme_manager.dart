@@ -10,9 +10,10 @@ ThemeData getApplicationTheme() {
   return ThemeData(
     // main colors
     primaryColor: ColorManager.primary,
+    primarySwatch: Colors.orange,
     primaryColorLight: ColorManager.lightPrimary,
     primaryColorDark: ColorManager.darkPrimary,
-    disabledColor: ColorManager.grey1,
+    disabledColor: ColorManager.primary,
     splashColor: ColorManager.lightPrimary,
     fontFamily: FontConstants.fontFamily,
 
@@ -64,11 +65,20 @@ ThemeData getApplicationTheme() {
     // text theme
     textTheme: TextTheme(
       displayLarge: getSemiBoldStyle(
-          color: ColorManager.darkGrey, fontSize: FontSize.s16),
+        color: ColorManager.darkPrimary,
+        fontSize: FontSize.s22,
+      ),
+      displayMedium: getLightStyle(
+        color: ColorManager.lightPrimary,
+      ),
       headlineLarge: getSemiBoldStyle(
-          color: ColorManager.darkGrey, fontSize: FontSize.s16),
-      headlineMedium:
-          getRegularStyle(color: ColorManager.darkGrey, fontSize: FontSize.s14),
+        color: ColorManager.darkGrey,
+        fontSize: FontSize.s16,
+      ),
+      headlineMedium: getRegularStyle(
+        color: ColorManager.darkGrey,
+        fontSize: FontSize.s14,
+      ),
       titleMedium: getMediumStyle(
           color: ColorManager.primary /* fontSize: FontSize.s14*/),
       bodyLarge: getRegularStyle(color: ColorManager.grey1),

@@ -1,10 +1,57 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:file_manager/app/resources/color_manager.dart';
+import 'package:file_manager/app/resources/styles_manager.dart';
+import 'package:file_manager/app/resources/values_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'default_loading.dart';
+
 class DefaultButton extends StatelessWidget {
-  const DefaultButton({Key? key}) : super(key: key);
+  DefaultButton({
+    super.key,
+    required this.function,
+    required this.text,
+    this.width = double.infinity,
+    this.background = ColorManager.primary,
+    this.isUpperCase = true,
+    this.radius = AppSize.s8,
+    this.isLoading = false,
+  });
+
+  Function function;
+  String text;
+  double? width;
+  Color? background;
+  bool? isUpperCase;
+  double? radius;
+  bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      width: width,
+      height: 40.0,
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(radius!),
+      ),
+      child: MaterialButton(
+        onPressed: () => function(),
+        child: !isLoading
+            ? Text(
+                isUpperCase! ? text.toUpperCase() : text,
+                style: getRegularStyle(
+                  color: ColorManager.white,
+                  fontSize: AppPadding.p18,
+                ),
+              )
+            : DefaultLoading(
+                xT: 0.0,
+                yT: -30.0,
+              ),
+      ),
+    );
   }
 }
