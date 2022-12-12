@@ -1,6 +1,8 @@
 import 'package:file_manager/features/home/data/data_sources/remote/auth_service/auth_api_service.dart';
 import 'package:file_manager/features/home/domain/bodies/login_body.dart';
+import 'package:file_manager/features/home/domain/bodies/register_body.dart';
 import 'package:file_manager/features/home/domain/models/auth_model.dart';
+import 'package:file_manager/features/home/domain/models/register_model.dart';
 import 'package:file_manager/features/home/domain/repositories/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
@@ -14,6 +16,17 @@ class AuthRepoImpl extends AuthRepo {
   Future<AuthModel> login({
     required LoginBody loginBody,
   }) async {
-    return await _authApiService.login(loginBody: loginBody);
+    return await _authApiService.login(
+      loginBody: loginBody,
+    );
+  }
+
+  @override
+  Future<RegisterModel> register({
+    required RegisterBody registerBody,
+  }) async {
+    return await _authApiService.register(
+      registerBody: registerBody,
+    );
   }
 }

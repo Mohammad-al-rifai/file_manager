@@ -13,7 +13,7 @@ class _AuthApiService implements AuthApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.15.232:3030/api/';
+    baseUrl ??= 'http://192.168.52.232:3030/api/';
   }
 
   final Dio _dio;
@@ -42,6 +42,31 @@ class _AuthApiService implements AuthApiService {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = AuthModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<RegisterModel> register({registerBody}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(registerBody?.toJson() ?? <String, dynamic>{});
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<RegisterModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'users/signUp',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = RegisterModel.fromJson(_result.data!);
     return value;
   }
 

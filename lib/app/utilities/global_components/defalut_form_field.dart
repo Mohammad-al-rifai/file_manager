@@ -15,6 +15,7 @@ class DefaultFormField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.isPassword = false,
     this.onTap,
+    this.suffixPressed,
   });
 
   TextEditingController controller;

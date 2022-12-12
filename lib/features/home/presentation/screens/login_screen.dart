@@ -106,6 +106,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               return 'Password Required!';
                             }
                           },
+                          suffix: context.read<AuthCubit>().suffix,
+                          suffixPressed: () {
+                            context.read<AuthCubit>().changeVisibility();
+                          },
+                          isPassword: context.read<AuthCubit>().isPassWord,
                         ),
                         const SizedBox(
                           height: 20.0,
