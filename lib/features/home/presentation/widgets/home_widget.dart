@@ -1,280 +1,137 @@
+import 'package:file_manager/app/di/injector.dart%20';
 import 'package:file_manager/app/resources/color_manager.dart';
 import 'package:file_manager/app/resources/styles_manager.dart';
 import 'package:file_manager/app/resources/values_manager.dart';
+import 'package:file_manager/app/utilities/global_components/default_button.dart';
+import 'package:file_manager/app/utilities/global_components/default_loading.dart';
+import 'package:file_manager/features/home/presentation/cubit/home_cubit/home-cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeWidget extends StatelessWidget {
+import '../cubit/home_cubit/home_states.dart';
+
+class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
 
   @override
+  State<HomeWidget> createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    scrollController.addListener(
+      () {
+        final maxScroll = scrollController.position.maxScrollExtent;
+        final currentScroll = scrollController.position.pixels;
+
+        final HomeCubit homeCubit = context.read<HomeCubit>();
+
+        final state = homeCubit.state;
+
+        if (maxScroll == currentScroll) {
+          homeCubit.getGroups();
+        }
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GridView(
-        physics: const BouncingScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          mainAxisExtent: 200.0,
-        ),
-        children: [
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: ColorManager.lightGrey,
+    return BlocConsumer<HomeCubit, HomeStates>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        print(state.runtimeType);
+        if (state is GetGroupsLoadingState) {
+          return Center(
+            child: DefaultLoading(),
+          );
+        }
+
+        if (state is GetGroupsDoneState) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GridView(
+              controller: scrollController,
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1,
+                mainAxisSpacing: 10.0,
+                crossAxisSpacing: 10.0,
+                mainAxisExtent: 200.0,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
+              children: [
+                ...List<Widget>.from(
+                  state.groups!.map(
+                    (e) => Builder(
+                      builder: (context) => GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsetsDirectional.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: ColorManager.lightGrey.withOpacity(.5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                CupertinoIcons.group,
+                                size: AppSize.s60,
+                                color: ColorManager.white,
+                              ),
+                              Text(
+                                e.grpName ?? 'No Name Group',
+                                style: getBoldStyle(
+                                  color: ColorManager.primary,
+                                  fontSize: AppPadding.p18,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text(
+                                e.grpId.toString() ?? '0 Member',
+                                style: getLightStyle(color: ColorManager.white),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
+                ),
+                if (state.noMoreGroups!) ...[
+                  const SizedBox(),
+                ] else ...[
+                  DefaultLoading(),
+                ]
+              ],
             ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: ColorManager.lightGrey),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
+          );
+        }
+
+        if (state is GetGroupsErrorState) {
+          return Center(
+            child: DefaultButton(
+              text: 'Something Error  try-again',
+              function: () {
+                context.read<HomeCubit>().getGroups();
+              },
             ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: ColorManager.lightGrey,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: ColorManager.lightGrey),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: ColorManager.lightGrey,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: ColorManager.lightGrey),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: ColorManager.lightGrey,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsetsDirectional.all(10.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: ColorManager.lightGrey),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.group,
-                    size: AppSize.s40,
-                    color: ColorManager.white,
-                  ),
-                  Text(
-                    'Group One',
-                    style: getBoldStyle(
-                        color: ColorManager.primary, fontSize: AppPadding.p28),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '20.0 Member',
-                    style: getLightStyle(color: ColorManager.white),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 }

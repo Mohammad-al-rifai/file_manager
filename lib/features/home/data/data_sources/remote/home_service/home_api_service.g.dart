@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_api_service.dart';
+part of 'home_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'auth_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _AuthApiService implements AuthApiService {
-  _AuthApiService(
+class _HomeApiService implements HomeApiService {
+  _HomeApiService(
     this._dio, {
     this.baseUrl,
   }) {
@@ -21,52 +21,63 @@ class _AuthApiService implements AuthApiService {
   String? baseUrl;
 
   @override
-  Future<AuthModel> login({loginBody}) async {
+  Future<GroupsModel> getGroups({
+    page,
+    size,
+    authorization,
+  }) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'size': size,
+    };
     queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    _data.addAll(loginBody?.toJson() ?? <String, dynamic>{});
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<AuthModel>(Options(
-      method: 'POST',
+        .fetch<Map<String, dynamic>>(_setStreamType<GroupsModel>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              'users/login',
+              'group/getGroups',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = AuthModel.fromJson(_result.data!);
+    final value = GroupsModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<RegisterModel> register({registerBody}) async {
+  Future<CreateGroupModel> createGroup({
+    authorization,
+    grpName,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(registerBody?.toJson() ?? <String, dynamic>{});
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'grpName': grpName};
+    _data.removeWhere((k, v) => v == null);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<RegisterModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<CreateGroupModel>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              'users/signUp',
+              'group/createGroup',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = RegisterModel.fromJson(_result.data!);
+    final value = CreateGroupModel.fromJson(_result.data!);
     return value;
   }
 

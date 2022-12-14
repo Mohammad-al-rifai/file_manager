@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:file_manager/app/di/injector.config.dart';
 import 'package:file_manager/app/utilities/constants.dart';
+import 'package:file_manager/features/home/data/data_sources/remote/home_service/home_api_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
@@ -25,5 +26,10 @@ abstract class RegisterModule {
           receiveDataWhenStatusError: true,
           receiveTimeout: 600000,
         ),
+      );
+
+  HomeApiService getHomeService(Dio client) => HomeApiService(
+        client,
+        baseUrl: Constants.baseUrl,
       );
 }

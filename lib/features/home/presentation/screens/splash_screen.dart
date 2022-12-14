@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _goNext() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) =>  const LoginScreen()));
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -43,20 +43,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.white,
-      body: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          Lottie.asset(
-            JsonAssets.splashScreen,
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-          Lottie.asset(
-            JsonAssets.fileManager,
-            fit: BoxFit.cover,
-          ),
-        ],
+      body: Center(
+        child: Lottie.asset(
+          JsonAssets.fileManager,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

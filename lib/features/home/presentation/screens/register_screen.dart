@@ -2,16 +2,18 @@
 
 import 'package:file_manager/app/di/injector.dart%20';
 import 'package:file_manager/features/home/domain/bodies/register_body.dart';
-import 'package:file_manager/features/home/presentation/cubit/auth_cubit.dart';
-import 'package:file_manager/features/home/presentation/cubit/auth_states.dart';
+import 'package:file_manager/features/home/presentation/cubit/auth_cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:file_manager/app/utilities/global_components/defalut_form_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/resources/color_manager.dart';
 import '../../../../app/resources/styles_manager.dart';
+import '../../../../app/utilities/constants.dart';
 import '../../../../app/utilities/global_components/default_button.dart';
 import '../../../../app/utilities/global_components/toast_notification.dart';
+import '../cubit/auth_cubit/auth_states.dart';
+import 'home_layout.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -36,6 +38,9 @@ class RegisterScreen extends StatelessWidget {
         child: BlocConsumer<AuthCubit, AuthStates>(
           listener: (context, state) {
             if (state is RegisterDoneState) {
+              // ===============SAVE TOKEN HERE=================
+              Constants.token = state.registerModel.data?.token;
+              // ===============================================
               showToast(
                 text: 'Register Done Success',
                 state: ToastStates.SUCCESS,
@@ -47,6 +52,8 @@ class RegisterScreen extends StatelessWidget {
                 state: ToastStates.ERROR,
               );
             }
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const HomeLayout()));
           },
           builder: (context, state) {
             print(state.runtimeType);

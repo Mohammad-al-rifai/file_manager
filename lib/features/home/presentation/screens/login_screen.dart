@@ -5,13 +5,14 @@ import 'package:file_manager/app/utilities/global_components/defalut_form_field.
 import 'package:file_manager/app/utilities/global_components/default_button.dart';
 import 'package:file_manager/app/utilities/global_components/toast_notification.dart';
 import 'package:file_manager/features/home/domain/bodies/login_body.dart';
-import 'package:file_manager/features/home/presentation/cubit/auth_states.dart';
 import 'package:file_manager/features/home/presentation/screens/register_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/auth_cubit.dart';
+import '../../../../app/utilities/constants.dart';
+import '../cubit/auth_cubit/auth_cubit.dart';
+import '../cubit/auth_cubit/auth_states.dart';
 import 'home_layout.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,6 +45,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   state: ToastStates.WARNING,
                 );
               } else {
+                // ===============SAVE TOKEN HERE=================
+                Constants.token = state.loginModel.user?.token;
+                // ===============================================
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeLayout()));
+                // ================================
                 showToast(
                   text: 'Login Done Success',
                   state: ToastStates.SUCCESS,

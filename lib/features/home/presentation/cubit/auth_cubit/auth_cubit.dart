@@ -8,6 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import 'auth_states.dart';
 
+
 @injectable
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit(this._authRepo) : super(AuthInitialState());

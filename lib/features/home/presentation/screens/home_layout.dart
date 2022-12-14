@@ -18,7 +18,7 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   List<Widget> _buildScreens() {
     return [
-      const HomeWidget(),
+       HomeWidget(),
       const SettingsWidget(),
     ];
   }
