@@ -45,6 +45,10 @@ class RegisterScreen extends StatelessWidget {
                 text: 'Register Done Success',
                 state: ToastStates.SUCCESS,
               );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeLayout()),
+              );
             }
             if (state is RegisterErrorState) {
               showToast(
@@ -52,8 +56,6 @@ class RegisterScreen extends StatelessWidget {
                 state: ToastStates.ERROR,
               );
             }
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeLayout()));
           },
           builder: (context, state) {
             print(state.runtimeType);

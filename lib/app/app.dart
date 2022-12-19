@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => injector<HomeCubit>()..getGroups(),
+          create: (context) => injector<HomeCubit>(),
         ),
       ],
       child: MaterialApp(

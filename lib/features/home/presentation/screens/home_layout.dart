@@ -18,10 +18,13 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   List<Widget> _buildScreens() {
     return [
-       HomeWidget(),
-      const SettingsWidget(),
+      const HomeWidget(),
+      SettingsWidget(),
     ];
   }
+
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
@@ -85,8 +88,8 @@ class _HomeLayoutState extends State<HomeLayout> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle:
-            NavBarStyle.style4, // Choose the nav bar style with this property.
+        navBarStyle: NavBarStyle.style4,
+        // Choose the nav bar style with this property.
       ),
     );
   }
